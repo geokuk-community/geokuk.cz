@@ -7,17 +7,21 @@
 // zprávy). Program okno se zprávami otevře, kdykoli přijde aspoň jedna,
 // proto se musí posílat jen nepřečtené (statický soubor by nestačil).
 //
-// Verze je poslední stabilní verze 6. Starší program ji jen porovná se svou;
-// když se liší, ukáže při každém startu dialog Spuštění nové verze (tak to
-// fungovalo vždy, „Připomenout příště“ nic neukládá). Jeho tlačítka jen otevřou
-// prohlížeč: Zobrazit web na http://geokuk.cz/, Stáhnout nejnovější verzi na
-// github.com/marvertin/geokuk/releases/latest (vydání 5.2.0 s odkazem na verzi 6).
-// Číslo nemusí přesně sledovat vydání, stačí, že je novější než 5.2.0.
+// „Verze“ není číslo, ale dovětek věty v dialogu Spuštění nové verze.
+// Verze 3.6 až 5.2.0 ji jen porovnají se svou (equals) a když se liší, ukážou
+// při každém startu (tak to fungovalo vždy, „Připomenout příště“ nic neukládá):
+//   "<html></b>Používaná verze programu Geokuk <b>" + VERSION + "</b> "
+//   + "není poslední distribuovanou verzí. Poslední distribuovaná verze je "
+//   + VERZE + "."
+// Text je HTML, musí být na jednom řádku a nesmí končit tečkou (přidá ji program).
+// Tlačítka dialogu jen otevřou prohlížeč: Zobrazit web na http://geokuk.cz/,
+// Stáhnout nejnovější verzi na github.com/marvertin/geokuk/releases/latest
+// (vydání 5.2.0 s odkazem na verzi 6). Při vydání nové verze 6 se nemění.
 //
 // Odpověď musí jít i přes http bez přesměrování: Java ve starých verzích
 // přesměrování z http na https nenásleduje.
 
-export const VERZE = "6.4.3";
+export const VERZE = "6 od GeoKuk community.<br>Stáhnete ji tlačítkem Zobrazit web z <b>geokuk.cz</b>";
 
 // Zprávy 1–6 jsou beze změny převzaté ze starého version.php
 // (marvertin/geokuk, větev master, distrib/version.php). Zpráva 5 neexistuje.
