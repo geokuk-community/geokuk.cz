@@ -7,13 +7,17 @@
 // zprávy). Program okno se zprávami otevře, kdykoli přijde aspoň jedna,
 // proto se musí posílat jen nepřečtené (statický soubor by nestačil).
 //
-// Verze zůstává 5.2.0: tlačítko „Stáhnout nejnovější verzi“ v 5.x stahuje
-// z marvertin/geokuk, kde je 5.2.0 poslední. Na verzi 6 upozorňuje zpráva 7.
+// Verze je poslední stabilní verze 6. Starší program ji jen porovná se svou;
+// když se liší, ukáže při každém startu dialog Spuštění nové verze (tak to
+// fungovalo vždy, „Připomenout příště“ nic neukládá). Jeho tlačítka jen otevřou
+// prohlížeč: Zobrazit web na http://geokuk.cz/, Stáhnout nejnovější verzi na
+// github.com/marvertin/geokuk/releases/latest (vydání 5.2.0 s odkazem na verzi 6).
+// Číslo nemusí přesně sledovat vydání, stačí, že je novější než 5.2.0.
 //
 // Odpověď musí jít i přes http bez přesměrování: Java ve starých verzích
 // přesměrování z http na https nenásleduje.
 
-export const VERZE = "5.2.0";
+export const VERZE = "6.4.3";
 
 // Zprávy 1–6 jsou beze změny převzaté ze starého version.php
 // (marvertin/geokuk, větev master, distrib/version.php). Zpráva 5 neexistuje.

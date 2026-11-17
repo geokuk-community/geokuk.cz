@@ -14,14 +14,14 @@ Program GeoKuk ve verzi 6 na geokuk.cz nezávisí, novou verzi hledá na GitHub 
 GeoKuk 3.x až 5.2.0 volá při každém startu
 `http://geokuk.cz/version.php?verze=…&msgnad=N` a z odpovědi čte:
 
-- `<h1>[[5.2.0]]</h1>` – poslední verzi; když se liší od jeho vlastní, nabídne stažení,
+- `<h1>[[6.4.3]]</h1>` – poslední verzi; když se liší od jeho vlastní, ukáže při každém startu dialog Spuštění nové verze,
 - `<h1>==číslo==</h1>` – zprávy uživatelům s číslem větším než `msgnad`; když přijde aspoň jedna, otevře okno Zprávy uživatelům.
 
 Proto to nejde jako statický soubor na GitHub Pages: posílal by pořád všechny zprávy a okno by se otevíralo při každém startu. Worker dělá totéž co dřív PHP.
 
 Pravidla:
 
-- **Verze zůstává `5.2.0`.** Tlačítko Stáhnout nejnovější verzi ve verzi 5.x stahuje z `marvertin/geokuk/releases/latest`, kde je 5.2.0 poslední. Na verzi 6 upozorňuje zpráva 7.
+- **Verze je poslední stabilní verze 6** (`VERZE` ve `version.js`). Dialog nové verze ve starých verzích nic nestahuje, jen otevře prohlížeč: Zobrazit web vede na geokuk.cz, Stáhnout nejnovější verzi na `marvertin/geokuk/releases/latest`, tedy vydání 5.2.0, které odkazuje na verzi 6. Číslo nemusí sledovat každé vydání, stačí, že je novější než 5.2.0. Zpráva 7 navíc jednou vysvětlí přechod.
 - **Nová zpráva = nové vyšší číslo** na konci pole `ZPRAVY`. Starou zprávu neměňte ani nemažte, kdo ji četl, už ji znovu neuvidí.
 - **`version.php` musí odpovídat i přes `http://` bez přesměrování.** Java ve starých verzích přesměrování z http na https nenásleduje a ohlásí „poslední verze je null“.
 - **Výpadek je horší než stará odpověď:** bez odpovědi ukážou staré verze při každém startu nabídku verze „null“.
@@ -67,5 +67,5 @@ Pořadí je důležité: `version.php` nesmí ani na chvíli přestat odpovídat
    - na GitHubu nechat **Enforce HTTPS vypnuté** (HTTPS zajišťuje Cloudflare).
 5. **Ověření:** `worker/over.sh http://geokuk.cz`, v prohlížeči `https://geokuk.cz`, `http://geokuk.cz` (má přesměrovat
    na https) a `https://geokuk.cz/popis.html` (přesměrování na wiki). Spustit GeoKuk 5.2.0 a zkontrolovat,
-   že ukáže jen zprávu 7 a po Přečteno už při dalším startu nic.
+   že nabídne verzi 6.4.3 a ukáže zprávu 7, po Přečteno už jen nabídku verze.
 6. Starý hosting zrušit až po několika dnech bez potíží.
