@@ -1,0 +1,11 @@
+# Cloudflare Worker, který na geokuk.cz nahrazuje starý version.php.
+# Nasazení z příkazové řádky: npx wrangler deploy (v této složce).
+# Stejně dobře jde Worker založit ručně v Cloudflare a obsah version.js vložit do editoru.
+name = "geokuk-version"
+main = "version.js"
+compatibility_date = "2025-11-01"
+workers_dev = true
+
+routes = [
+  { pattern = "geokuk.cz/version.php*", zone_name = "geokuk.cz" },
+]

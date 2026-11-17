@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GeoKuk – plánování geovýletů na mapách</title>
+<meta name="description" content="GeoKuk je program pro plánování geocachingových výletů nad online i offline mapami. Načte keše z GPX, GeoGetu, GSAKu i OpenSAKu. Zdarma a open source.">
+<link rel="icon" href="img/ikona.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<meta property="og:title" content="GeoKuk – plánování geovýletů na mapách">
+<meta property="og:description" content="Program pro plánování geocachingových výletů nad online i offline mapami.">
+<meta property="og:image" content="https://geokuk.cz/img/mapa.png">
+<style>
+:root {
+  --bg: #f7f8f6;
+  --panel: #ffffff;
+  --text: #1e2124;
+  --muted: #5b636b;
+  --line: #dde2dc;
+  --green: #239c2b;
+  --green-dark: #1a7a21;
+  --accent: #ffb400;
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e2124;
+    --panel: #272b2f;
+    --text: #e9ecea;
+    --muted: #a6aeb5;
+    --line: #3a3f44;
+    --green: #4cd13a;
+    --green-dark: #3db52d;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+  }
+  .logo-svetle { display: none; }
+  .logo-tmave { display: inline; }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+a { color: var(--green); }
+a:hover { color: var(--green-dark); }
+.obal { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+header { padding: 28px 0 8px; }
+header .obal { display: flex; align-items: center; gap: 14px; }
+header img { width: 44px; height: 44px; }
+header .nazev { font-size: 1.6rem; font-weight: 700; letter-spacing: -.01em; }
+header nav { margin-left: auto; display: flex; gap: 18px; flex-wrap: wrap; }
+header nav a { color: var(--muted); text-decoration: none; font-size: .95rem; }
+header nav a:hover { color: var(--text); }
+.logo-tmave { display: none; }
+
+.uvod { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; padding: 40px 0 56px; }
+.uvod h1 { font-size: clamp(1.9rem, 4vw, 2.7rem); line-height: 1.15; margin: 0 0 16px; letter-spacing: -.02em; }
+.uvod p { color: var(--muted); font-size: 1.1rem; margin: 0 0 24px; }
+.uvod figure { margin: 0; }
+.uvod figure img { width: 100%; height: auto; border-radius: 10px; box-shadow: var(--shadow); border: 1px solid var(--line); display: block; }
+.tlacitka { display: flex; gap: 12px; flex-wrap: wrap; }
+.tlacitko {
+  display: inline-block; padding: 11px 20px; border-radius: 8px; text-decoration: none;
+  font-weight: 600; border: 1px solid var(--line); color: var(--text); background: var(--panel);
+}
+.tlacitko.hlavni { background: var(--green); border-color: var(--green); color: #fff; }
+.tlacitko.hlavni:hover { background: var(--green-dark); color: #fff; }
+.tlacitko:hover { color: var(--text); border-color: var(--muted); }
+.pozn { font-size: .9rem; color: var(--muted); margin-top: 12px; }
+
+section { padding: 40px 0; border-top: 1px solid var(--line); }
+section h2 { font-size: 1.5rem; margin: 0 0 20px; letter-spacing: -.01em; }
+.mrizka { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.karta { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
+.karta h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.karta p { margin: 0; color: var(--muted); font-size: .95rem; }
+.karta .zdroj { font-size: .9rem; color: var(--muted); }
+
+.stazeni { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.stazeni .karta p { margin-bottom: 14px; }
+.stazeni code { font-size: .9em; background: var(--bg); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); }
+ul.odkazy { margin: 0; padding-left: 20px; }
+ul.odkazy li { margin: 4px 0; }
+
+footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: .9rem; }
+
+@media (max-width: 820px) {
+  .uvod { grid-template-columns: 1fr; padding-top: 24px; }
+  .mrizka, .stazeni { grid-template-columns: 1fr; }
+  header nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="obal">
+    <img class="logo-svetle" src="img/logo-zelene.svg" alt="">
+    <img class="logo-tmave" src="img/logo-bile.svg" alt="">
+    <span class="nazev">GeoKuk</span>
+    <nav>
+      <a href="#funkce">Co umí</a>
+      <a href="#stazeni">Stažení</a>
+      <a href="https://github.com/geokuk-community/geokuk/wiki">Nápověda</a>
+      <a href="https://github.com/geokuk-community/geokuk">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="obal">
+
+  <div class="uvod">
+    <div>
+      <h1>Plánování geovýletů na mapách</h1>
+      <p>GeoKuk zobrazí keše a další kešoidy na online i offline mapách, pomůže je
+        vyfiltrovat, naplánovat výlet a nakreslit cestu. Zdarma, česky a open source.</p>
+      <div class="tlacitka">
+        <a class="tlacitko hlavni" href="#stazeni">Stáhnout</a>
+        <a class="tlacitko" href="https://github.com/geokuk-community/geokuk/wiki">Nápověda</a>
+      </div>
+      <p class="pozn">Pro Windows, Linux a macOS.</p>
+    </div>
+    <figure>
+      <img src="img/mapa.png" width="954" height="800" alt="Okno GeoKuku s kešemi na offline mapě">
+    </figure>
+  </div>
+
+  <section id="funkce">
+    <h2>Co umí</h2>
+    <div class="mrizka">
+      <div class="karta">
+        <h3>Keše odkudkoli</h3>
+        <p>Načte GPX, databáze GeoGetu, GSAKu a OpenSAKu i fotky s GPS. Zvládne i statisíce keší.</p>
+      </div>
+      <div class="karta">
+        <h3>Offline mapy</h3>
+        <p>Vektorové mapy (mapsforge) vykreslené přímo v počítači, bez internetu. Od verze 6.5 je stáhnete přímo z programu i s trasami a vrstevnicemi.</p>
+      </div>
+      <div class="karta">
+        <h3>Online podklady</h3>
+        <p>Mapy.cz, OpenStreetMap, ortofoto a Základní topografická mapa ČÚZK, ortofoto Slovenska a vlastní uživatelské mapy.</p>
+      </div>
+      <div class="karta">
+        <h3>Filtry a zvýraznění</h3>
+        <p>Filtr podle typu, stavu, obtížnosti, terénu i favoritů, popisky, kruhy a obsazenost 161 m.</p>
+      </div>
+      <div class="karta">
+        <h3>Výlety a cesty</h3>
+        <p>Výlet Lovím / Teď ne, kreslení cest, export do GPX a do GeoGetu, tisk a export mapy.</p>
+      </div>
+      <div class="karta">
+        <h3>Plánovač challenge</h3>
+        <p>Chybějící sektory 360° a políčka matice D/T s kandidáty přímo na mapě. Nově ve verzi 6.5.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="stazeni">
+    <h2>Stažení</h2>
+    <div class="stazeni">
+      <div class="karta">
+        <h3>Windows</h3>
+        <p>Zip obsahuje i Javu, nic dalšího se neinstaluje. Rozbalte ho třeba do <code>C:\</code>
+          a poprvé spusťte <code>GeoKuk-prvni-spusteni.cmd</code>. Nové verze se instalují samy.</p>
+        <a class="tlacitko hlavni" href="https://github.com/geokuk-community/geokuk/releases/latest/download/GeoKuk-windows.zip">GeoKuk-windows.zip</a>
+      </div>
+      <div class="karta">
+        <h3>Linux a macOS</h3>
+        <p>Potřebujete Javu 8 nebo novější. Stáhněte <code>geokuk.jar</code> do vlastní složky
+          a spusťte <code>java -jar geokuk.jar</code>.</p>
+        <a class="tlacitko" href="https://github.com/geokuk-community/geokuk/releases/latest/download/geokuk.jar">geokuk.jar</a>
+      </div>
+    </div>
+    <p class="pozn">GeoKuk se neinstaluje: všechno, co si ukládá, je ve složce <code>data</code> vedle programu.
+      Podrobný postup je na stránce
+      <a href="https://github.com/geokuk-community/geokuk/wiki/Instalace-a-prvn%C3%AD-spu%C5%A1t%C4%9Bn%C3%AD">Instalace a první spuštění</a>,
+      starší verze a testovací bety v <a href="https://github.com/geokuk-community/geokuk/releases">Releases</a>.</p>
+  </section>
+
+  <section id="prechod">
+    <h2>Používáte starší verzi?</h2>
+    <p>Verze 6 se instaluje do vlastní složky a starou verzi nepřepíše. Nastavení převezme
+      při prvním spuštění; jak přenést keše, výlety, cesty a ikony, popisuje stránka
+      <a href="https://github.com/geokuk-community/geokuk/wiki/P%C5%99echod-ze-star%C5%A1%C3%AD-verze">Přechod ze starší verze</a>.
+      Co je ve verzích nového, je v <a href="https://github.com/geokuk-community/geokuk/blob/main/CHANGELOG.md">přehledu změn</a>.</p>
+  </section>
+
+  <section id="pomoc">
+    <h2>Nápověda a kontakt</h2>
+    <ul class="odkazy">
+      <li><a href="https://github.com/geokuk-community/geokuk/wiki">Nápověda (wiki)</a> – návody k jednotlivým funkcím.</li>
+      <li><a href="https://github.com/geokuk-community/geokuk/issues">Hlášení chyb a nápady</a> – nejlépe přímo z programu: Nápověda &gt; Zadat problém.</li>
+      <li><a href="https://github.com/geokuk-community/geokuk">Zdrojový kód</a> a <a href="https://github.com/geokuk-community/geokuk/blob/main/CONTRIBUTING.md">jak přispět</a>.</li>
+    </ul>
+  </section>
+
+  <section id="puvod">
+    <h2>Původ</h2>
+    <p>GeoKuk napsal Martin Veverka. K vývoji přispěli Dan Stahr (verze 4) a Jiří Bílek (verze 5.1.1c).
+      Od roku 2026 ho dál vyvíjí <a href="https://github.com/geokuk-community">GeoKuk community</a>.
+      Program je šířen pod licencí <a href="https://github.com/geokuk-community/geokuk/blob/main/LICENSE">GNU GPL v3</a>.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="obal">
+    GeoKuk · <a href="https://github.com/geokuk-community/geokuk">github.com/geokuk-community/geokuk</a>
+  </div>
+</footer>
+
+</body>
+</html>
